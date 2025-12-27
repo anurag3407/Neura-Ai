@@ -79,8 +79,8 @@ function App() {
       ];
       
 
-      const updatedResult = [...result, ...newResult];
-      setResult(updatedResult);
+      // Use functional update to avoid dependency on result
+      setResult(prevResult => [...prevResult, ...newResult]);
       
 
       setLastAnsweredQuestion(currentQ);
@@ -96,7 +96,7 @@ function App() {
     } finally {
       setLoader(false);
     }
-  }, [selectedHistory, result]);
+  }, [selectedHistory]);
 
 
 
