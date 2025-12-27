@@ -1,27 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import { URL } from './constants';
+import { useEffect, useRef, useState, useCallback } from 'react'
 import RecentSearch from './components/recentSearch';
 import QuestionAnswer from './components/questionAnswer';
 import InputField from './components/InputField';
+import { URL } from './constants';
 
-
-const processApiResponse = (text) => {
-
-  if (text.includes('**') || text.includes(':\n')) {
-
-    return {
-      structured: true,
-      content: text
-    };
-  } else {
-
-    const items = text.split('* ').map(item => item.trim()).filter(item => item);
-    return {
-      structured: false,
-      content: items
-    };
-  }
-};
 
 function App() {
 
@@ -41,7 +23,7 @@ function App() {
 
   const currentQuestionRef = useRef('');
 
-  const askQuestion = async (questionText = null) => {
+  const askQuestion = useCallback(async (questionText = null) => {
 
     if (!questionText && !selectedHistory) {
       return false
@@ -114,7 +96,7 @@ function App() {
     } finally {
       setLoader(false);
     }
-  }
+  }, [selectedHistory, result]);
 
 
 
@@ -124,7 +106,7 @@ function App() {
     if (selectedHistory) {
       askQuestion();
     }
-  }, [selectedHistory])
+  }, [selectedHistory, askQuestion])
 
 
   useEffect(() => {
